@@ -18,7 +18,10 @@ MonoBehaviour:
     \u0418\u0437 \u043D\u0435\u0451 \u043F\u0438\u043B\u0438 \u043A\u0430\u043A\u0430\u043E
     \u043F\u043E \u0441\u0443\u0431\u0431\u043E\u0442\u0430\u043C."
   kind: 0
-  points: 3
+  rememberHope: 2
+  rememberDespair: 0
+  forgetHope: 0
+  forgetDespair: 1
   captureDuration: 3
   captureComments:
   - "\u0421\u043C\u0435\u0448\u043D\u0430\u044F \u0448\u0442\u0443\u043A\u0430."

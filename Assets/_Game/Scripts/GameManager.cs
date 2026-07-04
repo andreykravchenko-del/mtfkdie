@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public enum GameMode { Intro, Explore, Inspect, Narrative, Reveal, Ending }
 
@@ -11,11 +12,20 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [Header("Копилки")]
-    [SerializeField] private int lifePoints;
-    [SerializeField] private int deathPoints;
+    [FormerlySerializedAs("lifePoints")]  [SerializeField] private int hope;
+    [FormerlySerializedAs("deathPoints")] [SerializeField] private int despair;
 
-    public int LifePoints => lifePoints;
-    public int DeathPoints => deathPoints;
+    public int Hope => hope;
+    public int Despair => despair;
+
+    [Header("Секретная концовка")]
+    [Tooltip("Общее число предметов памяти. -1 = посчитать автоматически по сцене на старте.")]
+    [SerializeField] private int totalMemoryItemsOverride = -1;
+
+    /// Сколько предметов игрок запомнил (E) и забыл (F) — для секретной концовки «всё забыть».
+    public int RememberedCount { get; private set; }
+    public int ForgottenCount { get; private set; }
+    public int TotalMemoryItems { get; private set; }
 
     public GameMode Mode { get; private set; } = GameMode.Explore;
 
@@ -30,9 +40,23 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // Кешируем общее число предметов для секретной концовки: все Interactable существуют
+        // на старте (собранные лишь помечаются Collected, из сцены не удаляются).
+        TotalMemoryItems = totalMemoryItemsOverride >= 0
+            ? totalMemoryItemsOverride
+            : CountMemoryItems();
+
         // Если в сцене есть интро — оно само выставит режим Intro. Иначе стартуем в Explore.
         if (FindFirstObjectByType<IntroSequence>() == null)
             SetMode(GameMode.Explore);
+    }
+
+    static int CountMemoryItems()
+    {
+        int n = 0;
+        foreach (var it in FindObjectsByType<Interactable>(FindObjectsSortMode.None))
+            if (it.Data != null) n++;
+        return n;
     }
 
     public void SetMode(GameMode mode)
@@ -46,6 +70,10 @@ public class GameManager : MonoBehaviour
         ModeChanged?.Invoke(mode);
     }
 
-    public void AddLife(int amount) => lifePoints += Mathf.Max(0, amount);
-    public void AddDeath(int amount) => deathPoints += Mathf.Max(0, amount);
+    public void AddHope(int amount)    => hope    += Mathf.Max(0, amount);
+    public void AddDespair(int amount) => despair += Mathf.Max(0, amount);
+
+    /// Учёт выбора игрока (для секретной концовки «всё забыть»).
+    public void RegisterRemember() => RememberedCount++;
+    public void RegisterForget()   => ForgottenCount++;
 }

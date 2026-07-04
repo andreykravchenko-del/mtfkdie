@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum MemoryKind { Good, Bad }
+public enum MemoryKind { Good, Heavy, Complex }
 
 /// <summary>
 /// Данные одного осколка памяти. Создаётся: ПКМ в Project ▸ Create ▸ Game ▸ Memory Data.
@@ -13,8 +13,18 @@ public class MemoryData : ScriptableObject
     [TextArea(3, 6)] public string description;
 
     [Header("Влияние на исход")]
+    [Tooltip("Ярлык для нарратива/подсказок. На очки НЕ влияет — очки задаются дельтами ниже.")]
     public MemoryKind kind = MemoryKind.Good;
-    [Min(0)] public int points = 1;
+
+    [Header("Дельты очков (надежда / безнадёжность)")]
+    [Tooltip("Запомнить (держать E): сколько прибавить к надежде.")]
+    [Min(0)] public int rememberHope;
+    [Tooltip("Запомнить (держать E): сколько прибавить к безнадёжности.")]
+    [Min(0)] public int rememberDespair;
+    [Tooltip("Забыть (держать F): сколько прибавить к надежде.")]
+    [Min(0)] public int forgetHope;
+    [Tooltip("Забыть (держать F): сколько прибавить к безнадёжности.")]
+    [Min(0)] public int forgetDespair;
 
     [Header("Запоминание")]
     [Tooltip("Сколько секунд держать E, чтобы запомнить предмет.")]
@@ -32,4 +42,9 @@ public class MemoryData : ScriptableObject
     public AudioClip itemSound;
     [Tooltip("Звук воспоминания — играет вместе с картинкой при успешном запоминании.")]
     public AudioClip revealSound;
+
+    /// Прибавка к надежде за выбор: remember=true — «Запомнить», false — «Забыть».
+    public int HopeFor(bool remember)    => remember ? rememberHope    : forgetHope;
+    /// Прибавка к безнадёжности за выбор: remember=true — «Запомнить», false — «Забыть».
+    public int DespairFor(bool remember) => remember ? rememberDespair : forgetDespair;
 }

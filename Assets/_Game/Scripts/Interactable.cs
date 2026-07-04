@@ -49,7 +49,9 @@ public class Interactable : MonoBehaviour, IInteractable
 
     public void Interact(PlayerInteractor interactor)
     {
-        if (Collected || InspectionController.Instance == null) return;
+        // data == null не осматриваем: иначе предмет «расходуется» и крутит счётчики,
+        // не входя в TotalMemoryItems — сломается условие секретной концовки.
+        if (Collected || data == null || InspectionController.Instance == null) return;
         InspectionController.Instance.Open(this);
     }
 

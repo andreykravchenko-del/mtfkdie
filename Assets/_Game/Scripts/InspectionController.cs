@@ -40,13 +40,20 @@ public class InspectionController : MonoBehaviour
     [Header("Звук")]
     [SerializeField] private AudioClip openClip;
     [SerializeField] private AudioClip successClip;
-    [Tooltip("Зациклённый серый шум — играет, пока зажат F (отмена запоминания).")]
+    [Tooltip("Звук при успешном забывании (F доведён до 100%).")]
+    [SerializeField] private AudioClip forgetClip;
+    [Tooltip("Зациклённый серый шум — играет, пока зажат F (забывание).")]
     [SerializeField] private AudioSource greyNoiseSource;
+
+    [Header("Цвета шкалы (E — запомнить / F — забыть)")]
+    [SerializeField] private Color rememberColor = new Color(0.5f, 0.85f, 0.6f);
+    [SerializeField] private Color forgetColor   = new Color(0.6f, 0.6f, 0.62f);
 
     private Interactable currentItem;
     private GameObject stageInstance;
     private int inspectLayer;
-    private float progress;
+    private float rememberProgress;
+    private float forgetProgress;
     private int lastCommentIndex;
     private bool active;
 
@@ -62,7 +69,8 @@ public class InspectionController : MonoBehaviour
     public void Open(Interactable item)
     {
         currentItem = item;
-        progress = 0f;
+        rememberProgress = 0f;
+        forgetProgress = 0f;
         lastCommentIndex = -1;
         active = true;
 
@@ -76,7 +84,7 @@ public class InspectionController : MonoBehaviour
         if (nameText != null) nameText.text = data != null ? data.displayName : item.name;
         if (descriptionText != null) descriptionText.text = data != null ? data.description : "";
         if (commentText != null) commentText.text = "";
-        if (holdHintText != null) holdHintText.text = "E — запомнить   •   F — отменить   •   Esc — назад";
+        if (holdHintText != null) holdHintText.text = "E — запомнить   •   F — забыть   •   Esc — назад";
         SetBar(0f, false);
 
         AudioManager.PlaySFX(openClip);
@@ -106,21 +114,37 @@ public class InspectionController : MonoBehaviour
         bool holdE = kb != null && kb.eKey.isPressed;
         bool holdF = kb != null && kb.fKey.isPressed;
 
-        SetGreyNoise(holdF);
+        // Явные намерения через XOR: одновременный E+F ничего не заполняет.
+        bool wantRemember = holdE && !holdF;
+        bool wantForget   = holdF && !holdE;
 
-        if (holdF)
+        SetGreyNoise(wantForget);
+
+        float dur = Mathf.Max(0.1f, currentItem.Data != null ? currentItem.Data.captureDuration : 3f);
+        float decay = cancelSpeed * Time.deltaTime;
+
+        if (wantRemember)
         {
-            // Отмена: шкала падает; на нуле — выходим (предмет остаётся).
-            progress -= cancelSpeed * Time.deltaTime;
-            SetBar(progress, progress > 0f);
-            if (progress <= 0f) { Cancel(); return; }
+            forgetProgress = Mathf.Max(0f, forgetProgress - decay);
+            rememberProgress += Time.deltaTime / dur;
+            UpdateComments(rememberProgress);
+            ShowBar(rememberProgress, rememberColor, 0 /*Left*/);
+            if (rememberProgress >= 1f) { ResolveRemember(); return; }
         }
-        else if (holdE)
+        else if (wantForget)
         {
-            progress += Time.deltaTime / Mathf.Max(0.1f, currentItem.Data.captureDuration);
-            UpdateComments();
-            SetBar(progress, true);
-            if (progress >= 1f) { Success(); return; }
+            rememberProgress = Mathf.Max(0f, rememberProgress - decay);
+            forgetProgress += Time.deltaTime / dur;
+            ShowBar(forgetProgress, forgetColor, 1 /*Right*/);
+            if (forgetProgress >= 1f) { ResolveForget(); return; }
+        }
+        else
+        {
+            // Простой или E+F вместе — обе шкалы угасают, показываем большую.
+            rememberProgress = Mathf.Max(0f, rememberProgress - decay);
+            forgetProgress   = Mathf.Max(0f, forgetProgress   - decay);
+            float shown = Mathf.Max(rememberProgress, forgetProgress);
+            SetBar(shown, shown > 0f);
         }
     }
 
@@ -135,7 +159,7 @@ public class InspectionController : MonoBehaviour
         stagePivot.Rotate(inspectCamera.transform.right, d.y * rotateSpeed, Space.World);
     }
 
-    void UpdateComments()
+    void UpdateComments(float progress)
     {
         var comments = currentItem.Data != null ? currentItem.Data.captureComments : null;
         if (comments == null || comments.Length == 0) return;
@@ -154,14 +178,16 @@ public class InspectionController : MonoBehaviour
             AudioManager.PlaySFX(currentItem.Data.itemSound);
     }
 
-    void Success()
+    /// Успешное запоминание (E доведён до 100%): очки за «Запомнить» + картинка-воспоминание.
+    void ResolveRemember()
     {
         var data = currentItem.Data;
         if (data != null)
         {
-            if (data.kind == MemoryKind.Good) GameManager.Instance.AddLife(data.points);
-            else GameManager.Instance.AddDeath(data.points);
+            GameManager.Instance.AddHope(data.HopeFor(true));
+            GameManager.Instance.AddDespair(data.DespairFor(true));
         }
+        GameManager.Instance.RegisterRemember();
         currentItem.MarkCollected();
         AudioManager.PlaySFX(successClip);
 
@@ -172,9 +198,19 @@ public class InspectionController : MonoBehaviour
             GameManager.Instance.SetMode(GameMode.Explore);
     }
 
-    /// Отмена запоминания через F (шкала опустела). Предмет остаётся.
-    void Cancel()
+    /// Забывание (F доведён до 100%): очки за «Забыть». Предмет расходуется, но БЕЗ картинки-воспоминания.
+    void ResolveForget()
     {
+        var data = currentItem.Data;
+        if (data != null)
+        {
+            GameManager.Instance.AddHope(data.HopeFor(false));
+            GameManager.Instance.AddDespair(data.DespairFor(false));
+        }
+        GameManager.Instance.RegisterForget();
+        currentItem.MarkCollected();
+        AudioManager.PlaySFX(forgetClip);
+
         Teardown();
         GameManager.Instance.SetMode(GameMode.Explore);
     }
@@ -192,7 +228,8 @@ public class InspectionController : MonoBehaviour
     void Teardown()
     {
         active = false;
-        progress = 0f;
+        rememberProgress = 0f;
+        forgetProgress = 0f;
         SetGreyNoise(false);
         if (stageInstance != null) Destroy(stageInstance);
         stageInstance = null;
@@ -211,5 +248,17 @@ public class InspectionController : MonoBehaviour
     {
         if (captureBarRoot != null) captureBarRoot.SetActive(visible);
         if (captureBarFill != null) captureBarFill.fillAmount = Mathf.Clamp01(value);
+    }
+
+    /// Показать активную шкалу заданным цветом и направлением заливки (0=Left / 1=Right).
+    void ShowBar(float value, Color color, int fillOrigin)
+    {
+        if (captureBarRoot != null) captureBarRoot.SetActive(true);
+        if (captureBarFill != null)
+        {
+            captureBarFill.fillOrigin = fillOrigin;
+            captureBarFill.color = color;
+            captureBarFill.fillAmount = Mathf.Clamp01(value);
+        }
     }
 }
