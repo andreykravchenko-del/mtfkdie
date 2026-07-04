@@ -28,4 +28,4 @@ MonoBehaviour:
     \u044D\u0442\u043E \u0442\u0435\u043F\u043B\u043E."
   memoryImage: {fileID: 21300000, guid: 37eed3c8b2de91d4c902d941e92bce14, type: 3}
   itemSound: {fileID: 0}
-  revealSound: {fileID: 0}
+  revealSound: {fileID: 8300000, guid: 492f682f1478f9644a93fb345b5381b7, type: 3}
