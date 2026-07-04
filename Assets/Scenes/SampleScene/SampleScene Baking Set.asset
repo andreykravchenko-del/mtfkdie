@@ -20,9 +20,9 @@ MonoBehaviour:
       bakeScene: 1
       bounds:
         m_Center: {x: 0, y: 0, z: 0}
-        m_Extent: {x: 27, y: 27, z: 27}
+        m_Extent: {x: 0, y: 0, z: 0}
   singleSceneMode: 1
-  dialogNoProbeVolumeInSetShown: 0
+  dialogNoProbeVolumeInSetShown: 1
   settings:
     m_Version: 1
     dilationSettings:
@@ -48,9 +48,7 @@ MonoBehaviour:
   cellDescs:
     m_Keys: 
     m_Values: []
-  m_SerializedPerSceneCellList:
-  - sceneGUID: 99c9720ab356a0642a771bea13969a05
-    cellList: 
+  m_SerializedPerSceneCellList: []
   cellSharedDataAsset:
     m_AssetGUID: 
     m_StreamableAssetPath: 
@@ -84,11 +82,11 @@ MonoBehaviour:
   globalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  bakedSimplificationLevels: 2
-  bakedMinDistanceBetweenProbes: 1
+  bakedSimplificationLevels: -1
+  bakedMinDistanceBetweenProbes: -1
   bakedProbeOcclusion: 0
-  bakedSkyOcclusionValue: 0
-  bakedSkyShadingDirectionValue: 0
+  bakedSkyOcclusionValue: -1
+  bakedSkyShadingDirectionValue: -1
   bakedProbeOffset: {x: 0, y: 0, z: 0}
   bakedMaskCount: 1
   bakedLayerMasks:
@@ -115,7 +113,7 @@ MonoBehaviour:
   version: 2
   freezePlacement: 0
   probeOffset: {x: 0, y: 0, z: 0}
-  simplificationLevels: 2
+  simplificationLevels: 3
   minDistanceBetweenProbes: 1
   renderersLayerMask:
     serializedVersion: 2
