@@ -5791,7 +5791,11 @@ MonoBehaviour:
   captureBarFill: {fileID: 1646486913}
   openClip: {fileID: 0}
   successClip: {fileID: 8300000, guid: 744b0a3ce57b4e040b1302e75eeca79d, type: 3}
+  forgetClip: {fileID: 0}
   greyNoiseSource: {fileID: 601621002}
+  rememberColor: {r: 0.5, g: 0.85, b: 0.6, a: 1}
+  forgetColor: {r: 0.6, g: 0.6, b: 0.62, a: 1}
+  commentGlitchMaterial: {fileID: 2100000, guid: 47b75422abbfab54eab3dab2270e059a, type: 2}
 --- !u!4 &1834593485
 Transform:
   m_ObjectHideFlags: 0
@@ -5822,9 +5826,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifePanel: {fileID: 319648289}
+  neutralPanel: {fileID: 0}
   deathPanel: {fileID: 373396436}
+  secretPanel: {fileID: 0}
   lifeMusic: {fileID: 0}
+  neutralMusic: {fileID: 0}
   deathGreyNoise: {fileID: 8300000, guid: 6d36d654b6f267242a33809e9386e561, type: 3}
+  secretSound: {fileID: 0}
+  goodThreshold: 6
+  badThreshold: -6
 --- !u!114 &1834593487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5886,8 +5896,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89728dd9896bcfd4189cc2a246c008d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifePoints: 0
-  deathPoints: 0
+  hope: 0
+  despair: 0
+  totalMemoryItemsOverride: -1
 --- !u!1 &1862173851 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5659663395487542888, guid: 6d4f7bab71bb3f85a9733fbb96428cd6, type: 3}

@@ -49,6 +49,10 @@ public class InspectionController : MonoBehaviour
     [SerializeField] private Color rememberColor = new Color(0.5f, 0.85f, 0.6f);
     [SerializeField] private Color forgetColor   = new Color(0.6f, 0.6f, 0.62f);
 
+    [Header("Глитч реплики при забывании")]
+    [Tooltip("Материал-пресет с шейдером TextMeshPro/Mobile/Distance Field Glitch. Пусто — эффект выключен.")]
+    [SerializeField] private Material commentGlitchMaterial;
+
     private Interactable currentItem;
     private GameObject stageInstance;
     private int inspectLayer;
@@ -56,6 +60,8 @@ public class InspectionController : MonoBehaviour
     private float forgetProgress;
     private int lastCommentIndex;
     private bool active;
+    private Material commentGlitchInstance;
+    private static readonly int GlitchAmountId = Shader.PropertyToID("_GlitchAmount");
 
     void Awake()
     {
@@ -84,6 +90,8 @@ public class InspectionController : MonoBehaviour
         if (nameText != null) nameText.text = data != null ? data.displayName : item.name;
         if (descriptionText != null) descriptionText.text = data != null ? data.description : "";
         if (commentText != null) commentText.text = "";
+        EnsureCommentGlitch();
+        SetCommentGlitch(0f);
         if (holdHintText != null) holdHintText.text = "E — запомнить   •   F — забыть   •   Esc — назад";
         SetBar(0f, false);
 
@@ -128,6 +136,7 @@ public class InspectionController : MonoBehaviour
             forgetProgress = Mathf.Max(0f, forgetProgress - decay);
             rememberProgress += Time.deltaTime / dur;
             UpdateComments(rememberProgress);
+            SetCommentGlitch(0f);
             ShowBar(rememberProgress, rememberColor, 0 /*Left*/);
             if (rememberProgress >= 1f) { ResolveRemember(); return; }
         }
@@ -135,6 +144,9 @@ public class InspectionController : MonoBehaviour
         {
             rememberProgress = Mathf.Max(0f, rememberProgress - decay);
             forgetProgress += Time.deltaTime / dur;
+            // Затираем оставшуюся реплику глитчем по мере забывания.
+            bool hasComment = commentText != null && !string.IsNullOrEmpty(commentText.text);
+            SetCommentGlitch(hasComment ? forgetProgress : 0f);
             ShowBar(forgetProgress, forgetColor, 1 /*Right*/);
             if (forgetProgress >= 1f) { ResolveForget(); return; }
         }
@@ -143,6 +155,7 @@ public class InspectionController : MonoBehaviour
             // Простой или E+F вместе — обе шкалы угасают, показываем большую.
             rememberProgress = Mathf.Max(0f, rememberProgress - decay);
             forgetProgress   = Mathf.Max(0f, forgetProgress   - decay);
+            SetCommentGlitch(0f);
             float shown = Mathf.Max(rememberProgress, forgetProgress);
             SetBar(shown, shown > 0f);
         }
@@ -231,6 +244,7 @@ public class InspectionController : MonoBehaviour
         rememberProgress = 0f;
         forgetProgress = 0f;
         SetGreyNoise(false);
+        SetCommentGlitch(0f);
         if (stageInstance != null) Destroy(stageInstance);
         stageInstance = null;
         if (inspectCamera != null) inspectCamera.gameObject.SetActive(false);
@@ -259,6 +273,32 @@ public class InspectionController : MonoBehaviour
             captureBarFill.fillOrigin = fillOrigin;
             captureBarFill.color = color;
             captureBarFill.fillAmount = Mathf.Clamp01(value);
+        }
+    }
+
+    /// Переключает реплику на инстанс glitch-материала (создаётся один раз).
+    void EnsureCommentGlitch()
+    {
+        if (commentGlitchMaterial == null || commentText == null) return;
+        if (commentGlitchInstance == null) commentGlitchInstance = new Material(commentGlitchMaterial);
+        commentText.fontSharedMaterial = commentGlitchInstance;
+    }
+
+    /// Сила затирания реплики (0 = чёткий текст, 1 = максимальные помехи).
+    /// TMP для fallback-глифов (заглавная кириллица, multi-atlas) сам создаёт материалы,
+    /// наследующие glitch-шейдер от основного и со СВОИМ правильным атласом, но НЕ
+    /// синхронизирует _GlitchAmount. Поэтому ставим его на основном инстансе И на всех
+    /// суб-меш-материалах — тогда глитчится и латиница, и кириллица.
+    void SetCommentGlitch(float amount)
+    {
+        amount = Mathf.Clamp01(amount);
+        if (commentGlitchInstance != null) commentGlitchInstance.SetFloat(GlitchAmountId, amount);
+        if (commentText == null) return;
+        var subs = commentText.GetComponentsInChildren<TMP_SubMeshUI>(true);
+        for (int i = 0; i < subs.Length; i++)
+        {
+            var m = subs[i].sharedMaterial;
+            if (m != null && m.HasProperty(GlitchAmountId)) m.SetFloat(GlitchAmountId, amount);
         }
     }
 }
