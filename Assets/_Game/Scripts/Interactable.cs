@@ -63,6 +63,14 @@ public class Interactable : MonoBehaviour, IInteractable
         if (col != null) col.enabled = false; // выпадает из рейкаста интерактора
     }
 
+    /// Предмет забыт: помечается собранным и ВЫКЛЮЧАЕТСЯ (исчезает из комнаты).
+    /// При перезапуске сцены объект снова активен — рантайм-выключение не сохраняется.
+    public void MarkForgotten()
+    {
+        MarkCollected();
+        gameObject.SetActive(false);
+    }
+
     /// Создаёт визуальную копию для сцены осмотра: без коллайдеров/скриптов, на нужном слое.
     public GameObject CreateInspectCopy(Transform parent, int layer)
     {

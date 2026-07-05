@@ -148,7 +148,8 @@ public class InspectionController : MonoBehaviour
         bool wantRemember = holdE && !holdF;
         bool wantForget   = holdF && !holdE;
 
-        SetGreyNoise(wantForget);
+        // Во время заполнения шкалы забывания — тишина. Звук забытия играем один раз по завершении
+        // (в ResolveForget), а не зациклённо во время удержания F.
 
         float dur = Mathf.Max(0.1f, currentItem.Data != null ? currentItem.Data.captureDuration : 3f);
         float decay = cancelSpeed * Time.deltaTime;
@@ -243,7 +244,7 @@ public class InspectionController : MonoBehaviour
             GameManager.Instance.AddDespair(data.DespairFor(false));
         }
         GameManager.Instance.RegisterForget(data != null && data.significant);
-        currentItem.MarkCollected();
+        currentItem.MarkForgotten(); // забытый предмет выключается (исчезает из комнаты)
         AudioManager.PlaySFX(forgetClip);
 
         Teardown();
@@ -301,6 +302,9 @@ public class InspectionController : MonoBehaviour
         // Собственный меш (а не примитив-Quad, привязанный к камере): вершины будем ставить прямо в
         // мировые углы кадра камеры — тогда размер/аспект/физкамера учтены автоматически.
         backdropQuad = new GameObject("InspectBlurBackdrop", typeof(MeshFilter), typeof(MeshRenderer));
+        // Служебный рантайм-объект: прячем из иерархии и не сохраняем — чтобы его нельзя было выбрать
+        // в Инспекторе (иначе при его уничтожении редактор сыплет NullReference в GameObjectInspector).
+        backdropQuad.hideFlags = HideFlags.HideAndDontSave;
         backdropQuad.layer = inspectLayer;
         backdropQuad.transform.SetParent(null, false);
         backdropQuad.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
