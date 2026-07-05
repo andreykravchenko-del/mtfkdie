@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Memory_Cigarettes
   m_EditorClassIdentifier: 
   displayName: "\u041F\u0430\u0447\u043A\u0430 \u0441\u0438\u0433\u0430\u0440\u0435\u0442"
-  description: "\u041F\u0430\u0447\u043A\u0430 \u0441\u0438\u0433\u0430\u0440\u0435\u0442. \u041F\u0430\u0443\u0437\u0430, \u0432 \u043A\u043E\u0442\u043E\u0440\u0443\u044E \u043C\u043E\u0436\u043D\u043E \u0431\u044B\u043B\u043E \u0434\u044B\u0448\u0430\u0442\u044C."
+  description: "\u041F\u0430\u0447\u043A\u0430 \u0441\u0438\u0433\u0430\u0440\u0435\u0442.
+    \u041F\u0430\u0443\u0437\u0430, \u0432 \u043A\u043E\u0442\u043E\u0440\u0443\u044E
+    \u043C\u043E\u0436\u043D\u043E \u0431\u044B\u043B\u043E \u0434\u044B\u0448\u0430\u0442\u044C."
   kind: 0
   significant: 1
   rememberHope: 2
@@ -25,5 +27,5 @@ MonoBehaviour:
   - "\u041E\u0434\u0438\u043D \u0432\u0434\u043E\u0445."
   - "\u041C\u043E\u043C\u0435\u043D\u0442 \u0442\u0438\u0448\u0438\u043D\u044B."
   memoryImage: {fileID: 0}
-  itemSound: {fileID: 0}
+  itemSound: {fileID: 8300000, guid: b1e7a0e895e3afe408aa7961c8d7f28a, type: 3}
   revealSound: {fileID: 8300000, guid: 492f682f1478f9644a93fb345b5381b7, type: 3}

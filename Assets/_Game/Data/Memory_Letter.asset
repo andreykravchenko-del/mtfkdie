@@ -28,5 +28,5 @@ MonoBehaviour:
   - "\u0412\u043D\u0443\u0442\u0440\u0438 \u0442\u043E\u043B\u044C\u043A\u043E \u0442\u044F\u0436\u0435\u0441\u0442\u044C."
   - "\u041B\u0443\u0447\u0448\u0435 \u0431\u044B \u0437\u0430\u0431\u044B\u0442\u044C."
   memoryImage: {fileID: 21300000, guid: 4cc53893b93de0841830525b72d94c04, type: 3}
-  itemSound: {fileID: 0}
+  itemSound: {fileID: 8300000, guid: d0a30bb275859864283cf803515b6c71, type: 3}
   revealSound: {fileID: 8300000, guid: 492f682f1478f9644a93fb345b5381b7, type: 3}

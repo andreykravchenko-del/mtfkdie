@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Memory_Blank
   m_EditorClassIdentifier: 
   displayName: "\u0427\u0438\u0441\u0442\u044B\u0439 \u043B\u0438\u0441\u0442"
-  description: "\u0427\u0438\u0441\u0442\u044B\u0439 \u043B\u0438\u0441\u0442 \u0431\u0443\u043C\u0430\u0433\u0438. \u0412\u0441\u0451, \u0447\u0442\u043E \u043C\u043E\u0433\u043B\u043E \u0431\u044B\u0442\u044C \u043D\u0430\u043F\u0438\u0441\u0430\u043D\u043E."
+  description: "\u0427\u0438\u0441\u0442\u044B\u0439 \u043B\u0438\u0441\u0442 \u0431\u0443\u043C\u0430\u0433\u0438.
+    \u0412\u0441\u0451, \u0447\u0442\u043E \u043C\u043E\u0433\u043B\u043E \u0431\u044B\u0442\u044C
+    \u043D\u0430\u043F\u0438\u0441\u0430\u043D\u043E."
   kind: 2
   significant: 1
   rememberHope: 1
@@ -25,5 +27,5 @@ MonoBehaviour:
   - "\u041C\u043E\u0436\u043D\u043E \u043D\u0430\u0447\u0430\u0442\u044C."
   - "\u0418\u043B\u0438 \u043E\u0441\u0442\u0430\u0432\u0438\u0442\u044C \u043F\u0443\u0441\u0442\u044B\u043C."
   memoryImage: {fileID: 0}
-  itemSound: {fileID: 0}
+  itemSound: {fileID: 8300000, guid: 9153471b7c051884bb982f4624d78d69, type: 3}
   revealSound: {fileID: 8300000, guid: 492f682f1478f9644a93fb345b5381b7, type: 3}
