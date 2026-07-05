@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public enum GameMode { Intro, Explore, Inspect, Narrative, Reveal, Ending }
+public enum GameMode { Intro, Explore, Inspect, Narrative, Reveal, Ending, Menu }
 
 /// <summary>
 /// Единый источник правды о текущем режиме игры и счёте.
@@ -71,7 +71,8 @@ public class GameManager : MonoBehaviour
         Mode = mode;
         // Курсор виден только в "меню-подобных" режимах; в Intro/Explore он скрыт и залочен.
         bool showCursor = mode == GameMode.Inspect || mode == GameMode.Narrative
-                       || mode == GameMode.Reveal  || mode == GameMode.Ending;
+                       || mode == GameMode.Reveal  || mode == GameMode.Ending
+                       || mode == GameMode.Menu;
         Cursor.lockState = showCursor ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = showCursor;
         ModeChanged?.Invoke(mode);

@@ -19,6 +19,8 @@ public class IntroSequence : MonoBehaviour
     [Tooltip("Секунд задержки на каждом ракурсе.")]
     [SerializeField] private float holdDuration = 1.5f;
     [SerializeField] private bool skippable = true;
+    [Tooltip("Запускать облёт сам, на старте сцены. Главное меню выключает это и вызывает облёт по кнопке «Играть».")]
+    [SerializeField] private bool playOnStart = true;
     [TextArea(2, 4)] [SerializeField] private string[] introLines;
     [SerializeField] private AudioClip introMusic;
 
@@ -27,7 +29,16 @@ public class IntroSequence : MonoBehaviour
     private Vector3 origLocalPos;
     private Quaternion origLocalRot;
 
+    /// Отключить авто-старт облёта (вызывает MainMenuController в Awake, до Start интро).
+    public void DisableAutoPlay() => playOnStart = false;
+
     void Start()
+    {
+        if (playOnStart) BeginIntro();
+    }
+
+    /// Запустить вступительный облёт. Вызывается из Start (авто) или из главного меню.
+    public void BeginIntro()
     {
         if (flyCamera == null) flyCamera = Camera.main;
         if (flyCamera == null || waypoints == null || waypoints.Length == 0)

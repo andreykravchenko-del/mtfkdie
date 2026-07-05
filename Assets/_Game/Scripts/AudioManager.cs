@@ -53,4 +53,11 @@ public class AudioManager : MonoBehaviour
         Instance.musicSource.volume = volume;
         Instance.musicSource.Play();
     }
+
+    /// Вернуть штатную фоновую музыку (после меню/паузы) — переиспользует настроенные в сцене клип и громкость.
+    public static void PlayBackground()
+    {
+        if (Instance == null) return;
+        PlayMusic(Instance.backgroundMusic, Instance.musicVolume);
+    }
 }

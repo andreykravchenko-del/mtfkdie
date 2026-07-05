@@ -16,9 +16,9 @@ MonoBehaviour:
   description: "\u041F\u043E\u0442\u0440\u0451\u043F\u0430\u043D\u043D\u0430\u044F \u0444\u0443\u0442\u0431\u043E\u043B\u043A\u0430. \u041C\u044F\u0433\u043A\u0430\u044F \u043E\u0442 \u0441\u043E\u0442\u043D\u0438 \u0441\u0442\u0438\u0440\u043E\u043A."
   kind: 2
   significant: 1
-  rememberHope: 2
+  rememberHope: 1
   rememberDespair: 1
-  forgetHope: 1
+  forgetHope: 0
   forgetDespair: 0
   captureDuration: 3
   captureComments:

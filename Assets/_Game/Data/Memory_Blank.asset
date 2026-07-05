@@ -19,7 +19,7 @@ MonoBehaviour:
   rememberHope: 1
   rememberDespair: 1
   forgetHope: 0
-  forgetDespair: 1
+  forgetDespair: 0
   captureDuration: 3
   captureComments:
   - "\u041C\u043E\u0436\u043D\u043E \u043D\u0430\u0447\u0430\u0442\u044C."
