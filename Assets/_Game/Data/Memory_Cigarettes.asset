@@ -18,7 +18,7 @@ MonoBehaviour:
     \u043C\u043E\u0436\u043D\u043E \u0431\u044B\u043B\u043E \u0434\u044B\u0448\u0430\u0442\u044C."
   kind: 0
   significant: 1
-  rememberHope: 2
+  rememberHope: 1
   rememberDespair: 0
   forgetHope: 0
   forgetDespair: 1

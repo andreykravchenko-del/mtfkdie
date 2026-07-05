@@ -20,7 +20,7 @@ MonoBehaviour:
   kind: 2
   significant: 1
   rememberHope: 1
-  rememberDespair: 1
+  rememberDespair: 2
   forgetHope: 0
   forgetDespair: 0
   captureDuration: 3

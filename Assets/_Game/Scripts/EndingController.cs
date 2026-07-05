@@ -25,8 +25,8 @@ public class EndingController : MonoBehaviour
     [SerializeField] private AudioClip secretSound;     // звук секретной концовки
 
     [Header("Пороги (diff = надежда − безнадёжность)")]
-    [Tooltip("diff ≥ этого значения → хорошая концовка. По документу 7 (рассчитано на 18 значимых предметов).")]
-    [SerializeField] private int goodThreshold = 7;
+    [Tooltip("diff ≥ этого значения → хорошая концовка. По документу 6 (рассчитано на 17 значимых предметов).")]
+    [SerializeField] private int goodThreshold = 6;
     [Tooltip("diff ≤ этого значения → плохая концовка. По документу -7.")]
     [SerializeField] private int badThreshold = -7;
 

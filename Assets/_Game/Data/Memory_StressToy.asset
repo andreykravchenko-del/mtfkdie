@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 016458319154fc44098e2641ac19dff8, type: 3}
-  m_Name: Memory_Toothbrush
+  m_Name: Memory_StressToy
   m_EditorClassIdentifier: 
-  displayName: "\u0417\u0443\u0431\u043D\u0430\u044F \u0449\u0451\u0442\u043A\u0430"
-  description: "\u0417\u0443\u0431\u043D\u0430\u044F \u0449\u0451\u0442\u043A\u0430 \u0432 \u0441\u0442\u0430\u043A\u0430\u043D\u0435."
+  displayName: "\u0418\u0433\u0440\u0443\u0448\u043a\u0430-\u0430\u043d\u0442\u0438\u0441\u0442\u0440\u0435\u0441\u0441"
+  description: "\u0418\u0433\u0440\u0443\u0448\u043a\u0430-\u0430\u043d\u0442\u0438\u0441\u0442\u0440\u0435\u0441\u0441. \u041c\u044f\u043b\u0430 \u0435\u0451, \u043a\u043e\u0433\u0434\u0430 \u0431\u044b\u043b\u043e \u043d\u0435\u0432\u044b\u043d\u043e\u0441\u0438\u043c\u043e."
   kind: 0
   significant: 0
   rememberHope: 0
@@ -22,7 +22,7 @@ MonoBehaviour:
   forgetDespair: 0
   captureDuration: 3
   captureComments:
-  - "\u041F\u0440\u043E\u0441\u0442\u043E \u0449\u0451\u0442\u043A\u0430."
+  - "\u041f\u0440\u043e\u0441\u0442\u043e \u0438\u0433\u0440\u0443\u0448\u043a\u0430."
   memoryImage: {fileID: 0}
   itemSound: {fileID: 0}
   revealSound: {fileID: 8300000, guid: 492f682f1478f9644a93fb345b5381b7, type: 3}

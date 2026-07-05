@@ -18,14 +18,14 @@ MonoBehaviour:
     \u043A\u043E\u0442\u043E\u0440\u044B\u0439 \u0443\u0436\u0435 \u043D\u0435 \u043F\u0435\u0440\u0435\u0441\u043B\u0443\u0448\u0430\u0442\u044C."
   kind: 2
   significant: 1
-  rememberHope: 1
+  rememberHope: 2
   rememberDespair: 1
   forgetHope: 0
-  forgetDespair: 0
+  forgetDespair: 1
   captureDuration: 3
   captureComments:
   - "\u041D\u0430\u0448\u0430 \u043F\u0435\u0441\u043D\u044F."
   - "\u041F\u043B\u0451\u043D\u043A\u0430 \u043E\u0441\u044B\u043F\u0430\u0435\u0442\u0441\u044F."
   memoryImage: {fileID: 0}
-  itemSound: {fileID: 8300000, guid: f15d266d87ad7b74ebbe570952f95e8e, type: 3}
+  itemSound: {fileID: 8300000, guid: 6dd4b9257e7078f438b1c6de932c0776, type: 3}
   revealSound: {fileID: 8300000, guid: 492f682f1478f9644a93fb345b5381b7, type: 3}
