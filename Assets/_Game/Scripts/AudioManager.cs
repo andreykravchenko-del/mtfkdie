@@ -78,6 +78,7 @@ public class AudioManager : MonoBehaviour
     {
         if (Instance == null || Instance.itemSource == null) return;
         Instance.itemSource.Stop();
+    }
     /// Играет ли сейчас управляемый звук (канал soundSource).
     public static bool IsSoundPlaying => Instance != null && Instance.soundSource != null && Instance.soundSource.isPlaying;
 
