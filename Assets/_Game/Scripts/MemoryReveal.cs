@@ -36,7 +36,7 @@ public class MemoryReveal : MonoBehaviour
         GameManager.Instance.SetMode(GameMode.Reveal);
         if (panel != null) panel.SetActive(true);
         if (image != null) { image.sprite = data.memoryImage; image.enabled = true; }
-        if (caption != null) caption.text = data.displayName;
+        if (caption != null) caption.text = data.memoryText;
 
         AudioManager.PlaySFX(data.revealSound); // короткий стинг открытия воспоминания
         AudioManager.PlayItem(data.itemSound, false); // звук предмета один раз (без лупа), обрывается при закрытии

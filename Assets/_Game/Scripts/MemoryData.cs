@@ -38,6 +38,9 @@ public class MemoryData : ScriptableObject
 
     [Header("Воспоминание (показывается при успехе)")]
     public Sprite memoryImage;
+    [TextArea(4, 10)]
+[Tooltip("Текст, который отображается вместе с картинкой воспоминания.")]
+public string memoryText;
     // Задел на будущее: public UnityEngine.Video.VideoClip memoryVideo;
 
     [Header("Звуки предмета")]
