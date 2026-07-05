@@ -6884,7 +6884,7 @@ MonoBehaviour:
   deathPanel: {fileID: 373396436}
   secretPanel: {fileID: 0}
   lifeMusic: {fileID: 0}
-  neutralMusic: {fileID: 0}
+  neutralMusic: {fileID: 8300000, guid: ce0bd46bb9314dc49b6a1d37b7150651, type: 3}
   deathGreyNoise: {fileID: 8300000, guid: 6d36d654b6f267242a33809e9386e561, type: 3}
   secretSound: {fileID: 0}
   goodThreshold: 6
