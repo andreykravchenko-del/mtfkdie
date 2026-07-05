@@ -3,10 +3,14 @@
 // пересекается с боксом-объёмом двора, и по точке пересечения сэмплится кубмапа.
 // При смещении камеры (головы игрока) ближние стены бокса «съезжают» сильнее
 // дальних — получается честный параллакс без геометрии за окном.
+//
+// Поверх вида изнутри — слой стекла: Fresnel-отражение окружения (reflection
+// probe / скайбокс со стороны игрока), солнечный блик и лёгкий тон стекла.
 Shader "Custom/WindowBoxProjectedCubemap"
 {
     Properties
     {
+        [Header(Interior)]
         [NoScaleOffset] _Cubemap ("Cubemap двора", Cube) = "" {}
         _Tint ("Оттенок", Color) = (1,1,1,1)
         _Exposure ("Экспозиция", Range(0,4)) = 1
@@ -15,6 +19,14 @@ Shader "Custom/WindowBoxProjectedCubemap"
         _BoxSize ("Размер бокса (XYZ)", Vector) = (30, 15, 30, 0)
         // Смещение центра бокса относительно объекта-окна.
         _BoxOffset ("Смещение центра бокса", Vector) = (0, 0, 0, 0)
+
+        [Header(Glass)]
+        _GlassTint ("Тон стекла", Color) = (0.85, 0.92, 0.95, 1)
+        _ReflectionStrength ("Сила отражений", Range(0,1)) = 0.5
+        _FresnelPower ("Резкость Френеля", Range(0.5,8)) = 4
+        _Smoothness ("Гладкость (чёткость отражений)", Range(0,1)) = 0.9
+        _SpecularStrength ("Сила блика солнца", Range(0,8)) = 2
+        _SpecularPower ("Узость блика", Range(4,512)) = 128
     }
 
     SubShader
@@ -38,7 +50,8 @@ Shader "Custom/WindowBoxProjectedCubemap"
             #pragma fragment frag
             #pragma target 3.5
 
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            // Lighting.hlsl тянет Core + GI (GlossyEnvironmentReflection) + GetMainLight.
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
             TEXTURECUBE(_Cubemap);
             SAMPLER(sampler_Cubemap);
@@ -49,17 +62,25 @@ Shader "Custom/WindowBoxProjectedCubemap"
                 float  _YRotation;
                 float4 _BoxSize;
                 float4 _BoxOffset;
+                float4 _GlassTint;
+                float  _ReflectionStrength;
+                float  _FresnelPower;
+                float  _Smoothness;
+                float  _SpecularStrength;
+                float  _SpecularPower;
             CBUFFER_END
 
             struct Attributes
             {
                 float4 positionOS : POSITION;
+                float3 normalOS   : NORMAL;
             };
 
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
                 float3 positionWS  : TEXCOORD0;
+                float3 normalWS    : TEXCOORD1;
             };
 
             Varyings vert (Attributes IN)
@@ -68,6 +89,7 @@ Shader "Custom/WindowBoxProjectedCubemap"
                 VertexPositionInputs vp = GetVertexPositionInputs(IN.positionOS.xyz);
                 OUT.positionHCS = vp.positionCS;
                 OUT.positionWS  = vp.positionWS;
+                OUT.normalWS    = TransformObjectToWorldNormal(IN.normalOS);
                 return OUT;
             }
 
@@ -96,19 +118,44 @@ Shader "Custom/WindowBoxProjectedCubemap"
 
             half4 frag (Varyings IN) : SV_Target
             {
-                // Центр бокса = позиция объекта-окна в мире + ручное смещение.
+                // --- Вид изнутри: box-projected cubemap ---
                 float3 boxCenter  = TransformObjectToWorld(float3(0, 0, 0)) + _BoxOffset.xyz;
                 float3 boxExtents = _BoxSize.xyz * 0.5;
 
-                // Луч от камеры через пиксель окна.
                 float3 origin = _WorldSpaceCameraPos;
                 float3 dir    = normalize(IN.positionWS - _WorldSpaceCameraPos);
 
                 float3 sampleDir = BoxProject(origin, dir, boxCenter, boxExtents);
                 sampleDir = RotateY(sampleDir, _YRotation);
 
-                half3 col = SAMPLE_TEXTURECUBE(_Cubemap, sampler_Cubemap, sampleDir).rgb;
-                col *= _Tint.rgb * _Exposure;
+                half3 interior = SAMPLE_TEXTURECUBE(_Cubemap, sampler_Cubemap, sampleDir).rgb;
+                interior *= _Tint.rgb * _Exposure;
+                // Стекло слегка тонирует то, что видно сквозь него.
+                interior *= _GlassTint.rgb;
+
+                // --- Слой стекла: нормаль, взгляд, Френель ---
+                float3 V = -dir; // от точки к камере
+                float3 N = normalize(IN.normalWS);
+                // Cull Off: нормаль тыльной грани смотрит от игрока — разворачиваем к нему.
+                N *= sign(dot(N, V));
+
+                float NdotV   = saturate(dot(N, V));
+                float fresnel = pow(1.0 - NdotV, _FresnelPower);
+
+                // Отражение окружения со стороны игрока (reflection probe / скайбокс).
+                float3 reflectVec = reflect(-V, N);
+                half   roughness  = 1.0 - _Smoothness;
+                half3  envRefl    = GlossyEnvironmentReflection(reflectVec, roughness, 1.0h);
+
+                // Солнечный блик от главного источника.
+                Light mainLight = GetMainLight();
+                float  glint    = pow(saturate(dot(reflectVec, mainLight.direction)), _SpecularPower);
+                half3  specular = glint * _SpecularStrength * mainLight.color;
+
+                // Смешиваем вид сквозь стекло с отражением по Френелю и добавляем блик.
+                half3 col = lerp(interior, envRefl, saturate(fresnel * _ReflectionStrength));
+                col += specular;
+
                 return half4(col, 1);
             }
             ENDHLSL
