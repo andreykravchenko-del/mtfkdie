@@ -1675,6 +1675,7 @@ MonoBehaviour:
   moveDuration: 3.5
   holdDuration: 1.5
   skippable: 1
+  playOnStart: 1
   introLines:
   - "\u0415\u0449\u0451 \u043E\u0434\u043D\u043E \u0443\u0442\u0440\u043E. \u0418\u043B\u0438
     \u0432\u0435\u0447\u0435\u0440 \u2014 \u0443\u0436\u0435 \u043D\u0435 \u0440\u0430\u0437\u0431\u0435\u0440\u0451\u0448\u044C."
@@ -3590,7 +3591,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prompt: "\u041F\u043E\u0442\u0440\u043E\u0433\u0430\u0442\u044C"
-  clip: {fileID: 0}
+  clip: {fileID: 8300000, guid: 3ff5b38f7fc44fe4f9f04b46a91ab812, type: 3}
   highlightRenderer: {fileID: 741274439}
   highlightColor: {r: 0.54901963, g: 0.6509804, b: 1, a: 1}
   highlightIntensity: 0.1
@@ -6369,6 +6370,63 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 5887539713737324625, guid: 6d4f7bab71bb3f85a9733fbb96428cd6, type: 3}
+--- !u!1001 &1299882828
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6241768049370877638, guid: bfa472b47de365d4d95f33518643a7f5, type: 3}
+      propertyPath: m_Name
+      value: MainMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 8340840348959020436, guid: bfa472b47de365d4d95f33518643a7f5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8340840348959020436, guid: bfa472b47de365d4d95f33518643a7f5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8340840348959020436, guid: bfa472b47de365d4d95f33518643a7f5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8340840348959020436, guid: bfa472b47de365d4d95f33518643a7f5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8340840348959020436, guid: bfa472b47de365d4d95f33518643a7f5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8340840348959020436, guid: bfa472b47de365d4d95f33518643a7f5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8340840348959020436, guid: bfa472b47de365d4d95f33518643a7f5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8340840348959020436, guid: bfa472b47de365d4d95f33518643a7f5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8340840348959020436, guid: bfa472b47de365d4d95f33518643a7f5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8340840348959020436, guid: bfa472b47de365d4d95f33518643a7f5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bfa472b47de365d4d95f33518643a7f5, type: 3}
 --- !u!1 &1334176085 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6696452735252220951, guid: 6d4f7bab71bb3f85a9733fbb96428cd6, type: 3}
@@ -8147,11 +8205,13 @@ MonoBehaviour:
   captureBarFill: {fileID: 1646486913}
   openClip: {fileID: 0}
   successClip: {fileID: 8300000, guid: 744b0a3ce57b4e040b1302e75eeca79d, type: 3}
-  forgetClip: {fileID: 0}
+  forgetClip: {fileID: 8300000, guid: 7b9b05dab3ba5974680458389de9d60c, type: 3}
   greyNoiseSource: {fileID: 601621002}
   rememberColor: {r: 0.5, g: 0.85, b: 0.6, a: 1}
   forgetColor: {r: 0.6, g: 0.6, b: 0.62, a: 1}
   commentGlitchMaterial: {fileID: 2100000, guid: 47b75422abbfab54eab3dab2270e059a, type: 2}
+  blurDownsample: 8
+  backdropDim: 0.4
 --- !u!4 &1834593485
 Transform:
   m_ObjectHideFlags: 0
@@ -10168,3 +10228,4 @@ SceneRoots:
   - {fileID: 242565755}
   - {fileID: 239344635}
   - {fileID: 1419566744}
+  - {fileID: 1299882828}
