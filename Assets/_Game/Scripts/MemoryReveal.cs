@@ -38,7 +38,8 @@ public class MemoryReveal : MonoBehaviour
         if (image != null) { image.sprite = data.memoryImage; image.enabled = true; }
         if (caption != null) caption.text = data.displayName;
 
-        AudioManager.PlaySFX(data.revealSound); // доп. звук воспоминания
+        AudioManager.PlaySFX(data.revealSound); // короткий стинг открытия воспоминания
+        AudioManager.PlayItem(data.itemSound, false); // звук предмета один раз (без лупа), обрывается при закрытии
     }
 
     void Update()
@@ -46,6 +47,7 @@ public class MemoryReveal : MonoBehaviour
         if (!showing || !AdvancePressed()) return;
 
         showing = false;
+        AudioManager.StopItem(); // вышли из показа картинки — обрываем звук предмета
         if (panel != null) panel.SetActive(false);
         GameManager.Instance.SetMode(GameMode.Explore);
     }

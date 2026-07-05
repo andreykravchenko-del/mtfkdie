@@ -12,8 +12,7 @@ using TMPro;
 ///   • открытие  — кликом по предмету (см. PlayerInteractor);
 ///   • зажать E  — наполнять шкалу (запоминать). Появляются реплики ГГ;
 ///   • зажать F  — опустошать шкалу (отменять). Играет серый шум; на нуле — выход, предмет остаётся;
-///   • Esc / ПКМ / крестик — выйти без запоминания, предмет остаётся в комнате;
-///   • R — заново проиграть звук предмета (шорох/мяуканье и т.п.).
+///   • Esc / ПКМ / крестик — выйти без запоминания, предмет остаётся в комнате.
 /// Шкала доведена до 100% (E) → успех: баллы + картинка-воспоминание, предмет "собран".
 /// </summary>
 public class InspectionController : MonoBehaviour
@@ -118,7 +117,8 @@ public class InspectionController : MonoBehaviour
         SetBar(0f, false);
 
         AudioManager.PlaySFX(openClip);
-        PlayItemSound();
+        // Звук самого предмета во время осмотра НЕ играем — он звучит на показе картинки-воспоминания
+        // (см. MemoryReveal) и обрывается при её закрытии.
     }
 
     void Update()
@@ -129,9 +129,6 @@ public class InspectionController : MonoBehaviour
 
         var kb = Keyboard.current;
         var mouse = Mouse.current;
-
-        // Переиграть звук предмета.
-        if (kb != null && kb.rKey.wasPressedThisFrame) PlayItemSound();
 
         // Выход без запоминания (предмет остаётся) — Esc / ПКМ.
         if ((kb != null && kb.escapeKey.wasPressedThisFrame) ||
@@ -206,12 +203,6 @@ public class InspectionController : MonoBehaviour
             lastCommentIndex = idx;
             if (commentText != null) commentText.text = comments[idx];
         }
-    }
-
-    void PlayItemSound()
-    {
-        if (currentItem != null && currentItem.Data != null)
-            AudioManager.PlaySFX(currentItem.Data.itemSound);
     }
 
     /// Успешное запоминание (E доведён до 100%): очки за «Запомнить» + картинка-воспоминание.

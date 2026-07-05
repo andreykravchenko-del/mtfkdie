@@ -43,6 +43,17 @@ public class GameManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+        ResetRun(); // каждая игра — с нуля, независимо от значений, сохранённых в сцене
+    }
+
+    /// Сброс всего прогресса в базовое состояние (очки и счётчики). Вызывается на старте сцены;
+    /// «В главное меню» перезагружает сцену → GameManager создаётся заново → прогресс обнуляется.
+    public void ResetRun()
+    {
+        hope = 0;
+        despair = 0;
+        RememberedCount = 0;
+        ForgottenCount = 0;
     }
 
     void Start()
