@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
     void Look()
     {
-        Vector2 delta = Mouse.current != null ? Mouse.current.delta.ReadValue() : Vector2.zero;
+        Vector2 delta = InputUtils.MouseLookDelta();
         transform.Rotate(Vector3.up, delta.x * lookSensitivity);
 
         pitch = Mathf.Clamp(pitch - delta.y * lookSensitivity, -85f, 85f);

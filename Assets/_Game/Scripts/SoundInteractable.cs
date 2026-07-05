@@ -42,6 +42,8 @@ public class SoundInteractable : MonoBehaviour, IInteractable
 
     public void Interact(PlayerInteractor interactor)
     {
-        AudioManager.PlaySFX(clip);
+        // Пока звук ещё играет — второе взаимодействие останавливает его,
+        // иначе запускаем заново. Наслоения не будет.
+        AudioManager.PlaySound(clip);
     }
 }

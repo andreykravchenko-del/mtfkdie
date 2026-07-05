@@ -68,6 +68,7 @@ public class InspectionController : MonoBehaviour
     private bool active;
     private Material commentGlitchInstance;
     private static readonly int GlitchAmountId = Shader.PropertyToID("_GlitchAmount");
+    private static readonly string[] GlitchProps = { "_GlitchShift", "_GlitchJitter", "_GlitchBandHeight", "_GlitchSpeed", "_GlitchDropout", "_GlitchDissolve", "_GlitchColor" };
 
     private Camera mainCam;
     private RenderTexture blurRT;
@@ -187,7 +188,7 @@ public class InspectionController : MonoBehaviour
         var mouse = Mouse.current;
         if (mouse == null || !mouse.leftButton.isPressed) return;
 
-        Vector2 d = mouse.delta.ReadValue();
+        Vector2 d = InputUtils.MouseLookDelta();
         stagePivot.Rotate(inspectCamera.transform.up, -d.x * rotateSpeed, Space.World);
         stagePivot.Rotate(inspectCamera.transform.right, d.y * rotateSpeed, Space.World);
     }
@@ -407,7 +408,26 @@ public class InspectionController : MonoBehaviour
     void EnsureCommentGlitch()
     {
         if (commentGlitchMaterial == null || commentText == null) return;
-        if (commentGlitchInstance == null) commentGlitchInstance = new Material(commentGlitchMaterial);
+        var glitchShader = commentGlitchMaterial.shader;
+        var fontMat = commentText.fontSharedMaterial;
+
+        // Исходный (не-glitch) материал ТЕКУЩЕГО шрифта — источник правильного атласа.
+        // Если на тексте уже наш инстанс — берём его же (атлас не менялся).
+        Material src = (fontMat != null && fontMat.shader == glitchShader) ? commentGlitchInstance : fontMat;
+        if (src == null) return;
+        var atlas = src.GetTexture("_MainTex");
+
+        // (Пере)создаём glitch-инстанс, если его нет или сменился шрифт (другой атлас).
+        // Берём атлас/свойства из материала шрифта, а шейдер и glitch-параметры — из пресета.
+        if (commentGlitchInstance == null || commentGlitchInstance.GetTexture("_MainTex") != atlas)
+        {
+            if (commentGlitchInstance != null) Destroy(commentGlitchInstance);
+            commentGlitchInstance = new Material(src);
+            commentGlitchInstance.shader = glitchShader;
+            for (int p = 0; p < GlitchProps.Length; p++)
+                if (commentGlitchMaterial.HasProperty(GlitchProps[p]))
+                    commentGlitchInstance.SetFloat(GlitchProps[p], commentGlitchMaterial.GetFloat(GlitchProps[p]));
+        }
         commentText.fontSharedMaterial = commentGlitchInstance;
     }
 
