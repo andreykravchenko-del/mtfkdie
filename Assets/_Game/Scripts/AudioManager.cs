@@ -10,8 +10,12 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource sfxSource;
+
     [Tooltip("Отдельный источник для звука предмета — его можно остановить (StopItem), в отличие от one-shot SFX.")]
     [SerializeField] private AudioSource itemSource;
+
+    [Tooltip("Управляемый канал: не наслаивает звук и умеет останавливаться (PlaySound/StopSound).")]
+    [SerializeField] private AudioSource soundSource;
 
     [Header("Фоновая музыка")]
     [Tooltip("Играет автоматически со старта сцены (зациклённо).")]
@@ -38,6 +42,11 @@ public class AudioManager : MonoBehaviour
         {
             itemSource = gameObject.AddComponent<AudioSource>();
             itemSource.playOnAwake = false;
+        }
+        if (soundSource == null)
+        {
+            soundSource = gameObject.AddComponent<AudioSource>();
+            soundSource.playOnAwake = false;
         }
     }
 
@@ -69,6 +78,24 @@ public class AudioManager : MonoBehaviour
     {
         if (Instance == null || Instance.itemSource == null) return;
         Instance.itemSource.Stop();
+    }
+    /// Играет ли сейчас управляемый звук (канал soundSource).
+    public static bool IsSoundPlaying => Instance != null && Instance.soundSource != null && Instance.soundSource.isPlaying;
+
+    /// Проиграть звук, но не перезапускать, пока предыдущий ещё играет.
+    public static void PlaySound(AudioClip clip)
+    {
+        if (clip == null || Instance == null || Instance.soundSource == null) return;
+        if (Instance.soundSource.isPlaying) return; // не наслаивать / не перезапускать
+        Instance.soundSource.clip = clip;
+        Instance.soundSource.Play();
+    }
+
+    /// Остановить управляемый звук.
+    public static void StopSound()
+    {
+        if (Instance == null || Instance.soundSource == null) return;
+        Instance.soundSource.Stop();
     }
 
     public static void PlayMusic(AudioClip clip, float volume = 1f)
