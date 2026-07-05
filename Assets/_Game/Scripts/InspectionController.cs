@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 using TMPro;
 
 /// <summary>
@@ -53,6 +54,12 @@ public class InspectionController : MonoBehaviour
     [Tooltip("Материал-пресет с шейдером TextMeshPro/Mobile/Distance Field Glitch. Пусто — эффект выключен.")]
     [SerializeField] private Material commentGlitchMaterial;
 
+    [Header("Фон осмотра — заблюренная комната")]
+    [Tooltip("Во сколько раз уменьшать снимок комнаты. Больше — сильнее размытие и дешевле.")]
+    [SerializeField] private int blurDownsample = 8;
+    [Tooltip("Затемнение фона для читаемости текста (0 — без затемнения).")]
+    [SerializeField] [Range(0f, 1f)] private float backdropDim = 0.4f;
+
     private Interactable currentItem;
     private GameObject stageInstance;
     private int inspectLayer;
@@ -62,6 +69,12 @@ public class InspectionController : MonoBehaviour
     private bool active;
     private Material commentGlitchInstance;
     private static readonly int GlitchAmountId = Shader.PropertyToID("_GlitchAmount");
+
+    private Camera mainCam;
+    private RenderTexture blurRT;
+    private GameObject backdropQuad;
+    private Mesh backdropMesh;
+    private Material backdropMat;
 
     void Awake()
     {
@@ -81,8 +94,17 @@ public class InspectionController : MonoBehaviour
         active = true;
 
         GameManager.Instance.SetMode(GameMode.Inspect);
-        if (inspectCamera != null) inspectCamera.gameObject.SetActive(true);
+        if (inspectCamera != null)
+        {
+            inspectCamera.gameObject.SetActive(true);
+            // Камера осмотра — физическая (сенсор 36×24), из-за чего кадр рендерился квадратом с чёрными
+            // полями. На время осмотра делаем её обычной с аспектом экрана — кадр заполняет весь экран.
+            inspectCamera.usePhysicalProperties = false;
+            inspectCamera.aspect = (float)Screen.width / Mathf.Max(1, Screen.height);
+        }
         if (inspectPanel != null) inspectPanel.SetActive(true);
+
+        ShowBlurBackdrop(); // заблюренная комната вместо чёрного фона
 
         stageInstance = item.CreateInspectCopy(stagePivot, inspectLayer);
 
@@ -247,6 +269,7 @@ public class InspectionController : MonoBehaviour
         SetCommentGlitch(0f);
         if (stageInstance != null) Destroy(stageInstance);
         stageInstance = null;
+        if (backdropQuad != null) backdropQuad.SetActive(false);
         if (inspectCamera != null) inspectCamera.gameObject.SetActive(false);
         if (inspectPanel != null) inspectPanel.SetActive(false);
     }
@@ -256,6 +279,115 @@ public class InspectionController : MonoBehaviour
         if (greyNoiseSource == null) return;
         if (on && !greyNoiseSource.isPlaying) greyNoiseSource.Play();
         else if (!on && greyNoiseSource.isPlaying) greyNoiseSource.Stop();
+    }
+
+    // ---------- Заблюренная комната как фон осмотра ----------
+    // Снимаем кадр главной камеры (комнату) в маленький RT, слегка сглаживаем и рисуем как задник
+    // на слое осмотра ЗА предметом. Камера осмотра рисует и задник, и предмет — предмет остаётся резким.
+    void ShowBlurBackdrop()
+    {
+        if (inspectCamera == null) return;
+        EnsureBackdrop();
+        bool ok = CaptureRoomBlur();
+        if (!ok) return; // нет главной камеры/шейдера — остаётся штатный чёрный фон
+        PlaceBackdrop();
+        if (backdropQuad != null) backdropQuad.SetActive(true);
+    }
+
+    void EnsureBackdrop()
+    {
+        if (backdropQuad != null) return;
+
+        // Собственный меш (а не примитив-Quad, привязанный к камере): вершины будем ставить прямо в
+        // мировые углы кадра камеры — тогда размер/аспект/физкамера учтены автоматически.
+        backdropQuad = new GameObject("InspectBlurBackdrop", typeof(MeshFilter), typeof(MeshRenderer));
+        backdropQuad.layer = inspectLayer;
+        backdropQuad.transform.SetParent(null, false);
+        backdropQuad.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+        backdropQuad.transform.localScale = Vector3.one; // мировые координаты 1:1
+
+        backdropMesh = new Mesh { name = "InspectBackdropMesh" };
+        backdropMesh.MarkDynamic();
+        backdropQuad.GetComponent<MeshFilter>().sharedMesh = backdropMesh;
+
+        backdropMat = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+        if (backdropMat.HasProperty("_Cull")) backdropMat.SetFloat("_Cull", 0f); // двусторонний
+        var mr = backdropQuad.GetComponent<MeshRenderer>();
+        mr.sharedMaterial = backdropMat;
+        mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        mr.receiveShadows = false;
+
+        backdropQuad.SetActive(false);
+    }
+
+    void PlaceBackdrop()
+    {
+        if (backdropQuad == null || backdropMesh == null) return;
+
+        // Гарантируем широкий кадр (см. Open): обычная камера + аспект экрана, иначе углы вьюпорта
+        // считаются от квадратной физ-проекции и задник выходит квадратом.
+        inspectCamera.usePhysicalProperties = false;
+        inspectCamera.aspect = (float)Screen.width / Mathf.Max(1, Screen.height);
+
+        // Дальше предмета, но в пределах far-plane — предмет всегда перед фоном.
+        float stageDist = stagePivot != null
+            ? Vector3.Distance(inspectCamera.transform.position, stagePivot.position)
+            : 10f;
+        float d = Mathf.Clamp(stageDist * 3f + 5f, 10f, inspectCamera.farClipPlane * 0.9f);
+
+        // Вершины = точные мировые углы кадра на расстоянии d.
+        Vector3 bl = inspectCamera.ViewportToWorldPoint(new Vector3(0f, 0f, d));
+        Vector3 br = inspectCamera.ViewportToWorldPoint(new Vector3(1f, 0f, d));
+        Vector3 tl = inspectCamera.ViewportToWorldPoint(new Vector3(0f, 1f, d));
+        Vector3 tr = inspectCamera.ViewportToWorldPoint(new Vector3(1f, 1f, d));
+
+        // Небольшой запас наружу от центра — чтобы точно не было каймы по краю.
+        Vector3 c = (bl + br + tl + tr) * 0.25f;
+        const float m = 1.1f;
+        bl = c + (bl - c) * m; br = c + (br - c) * m;
+        tl = c + (tl - c) * m; tr = c + (tr - c) * m;
+
+        backdropMesh.Clear();
+        backdropMesh.vertices  = new[] { bl, br, tl, tr };
+        backdropMesh.uv        = new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1) };
+        backdropMesh.triangles = new[] { 0, 2, 1, 2, 3, 1 };
+        backdropMesh.RecalculateBounds();
+    }
+
+    bool CaptureRoomBlur()
+    {
+        if (mainCam == null) mainCam = Camera.main;
+        if (mainCam == null || backdropMat == null) return false;
+
+        int w = Mathf.Max(16, Screen.width  / Mathf.Max(1, blurDownsample));
+        int h = Mathf.Max(16, Screen.height / Mathf.Max(1, blurDownsample));
+        if (blurRT == null || blurRT.width != w || blurRT.height != h)
+        {
+            if (blurRT != null) blurRT.Release();
+            blurRT = new RenderTexture(w, h, 24) { filterMode = FilterMode.Bilinear };
+            blurRT.Create();
+        }
+
+        // Рендерим комнату в маленький RT (URP-совместимо, синхронно). Низкое разрешение + билинейный
+        // апскейл на задник = мягкое размытие. Без Graphics.Blit — в URP он рисует источник не на весь
+        // destination (центр/угол), из-за чего и был «маленький квадрат с чёрным вокруг».
+        var req = new RenderPipeline.StandardRequest { destination = blurRT };
+        if (RenderPipeline.SupportsRenderRequest(mainCam, req))
+            mainCam.SubmitRenderRequest(req);
+
+        backdropMat.SetTexture("_BaseMap", blurRT);
+        if (backdropMat.HasProperty("_BaseColor"))
+        {
+            float k = 1f - Mathf.Clamp01(backdropDim);
+            backdropMat.SetColor("_BaseColor", new Color(k, k, k, 1f));
+        }
+        return true;
+    }
+
+    void OnDestroy()
+    {
+        if (blurRT != null) { blurRT.Release(); blurRT = null; }
+        if (backdropQuad != null) Destroy(backdropQuad); // самостоятельный объект, не потомок камеры
     }
 
     void SetBar(float value, bool visible)
