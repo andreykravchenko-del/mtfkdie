@@ -306,7 +306,15 @@ public class InspectionController : MonoBehaviour
         backdropMesh.MarkDynamic();
         backdropQuad.GetComponent<MeshFilter>().sharedMesh = backdropMesh;
 
-        backdropMat = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+        var backdropShader = Shader.Find("Universal Render Pipeline/Unlit");
+        if (backdropShader == null) backdropShader = Shader.Find("Sprites/Default"); // фолбэк на случай стриппинга в билде
+        if (backdropShader == null)
+        {
+            Debug.LogWarning("InspectionController: шейдер фона не найден — задник осмотра отключён.");
+            backdropQuad.SetActive(false);
+            return;
+        }
+        backdropMat = new Material(backdropShader);
         if (backdropMat.HasProperty("_Cull")) backdropMat.SetFloat("_Cull", 0f); // двусторонний
         var mr = backdropQuad.GetComponent<MeshRenderer>();
         mr.sharedMaterial = backdropMat;
