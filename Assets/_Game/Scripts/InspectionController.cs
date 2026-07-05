@@ -200,7 +200,7 @@ public class InspectionController : MonoBehaviour
             GameManager.Instance.AddHope(data.HopeFor(true));
             GameManager.Instance.AddDespair(data.DespairFor(true));
         }
-        GameManager.Instance.RegisterRemember();
+        GameManager.Instance.RegisterRemember(data != null && data.significant);
         currentItem.MarkCollected();
         AudioManager.PlaySFX(successClip);
 
@@ -220,7 +220,7 @@ public class InspectionController : MonoBehaviour
             GameManager.Instance.AddHope(data.HopeFor(false));
             GameManager.Instance.AddDespair(data.DespairFor(false));
         }
-        GameManager.Instance.RegisterForget();
+        GameManager.Instance.RegisterForget(data != null && data.significant);
         currentItem.MarkCollected();
         AudioManager.PlaySFX(forgetClip);
 

@@ -8,6 +8,9 @@ using UnityEngine;
 public class BedInteractable : MonoBehaviour, IInteractable
 {
     [SerializeField] private string prompt = "Лечь";
+    [Tooltip("Реплики ГГ, если лечь слишком рано (осмотрено меньше нужного числа значимых предметов).")]
+    [TextArea(2, 3)] [SerializeField] private string[] tooEarlyLines =
+        { "Ещё рано.", "Слишком многое не вспомнено." };
     [SerializeField] private Renderer highlightRenderer;
     [SerializeField] private Color highlightColor = new Color(0.55f, 0.65f, 1f);
     [SerializeField] private float highlightIntensity = 1.2f;
@@ -35,6 +38,15 @@ public class BedInteractable : MonoBehaviour, IInteractable
 
     public void Interact(PlayerInteractor interactor)
     {
+        // Финал закрыт, пока не осмотрено достаточно значимых предметов.
+        var gm = GameManager.Instance;
+        if (gm != null && !gm.FinaleUnlocked)
+        {
+            if (NarrativeSystem.Instance != null && tooEarlyLines != null && tooEarlyLines.Length > 0)
+                NarrativeSystem.Instance.Play(tooEarlyLines);
+            return;
+        }
+
         SetHighlight(false);
         if (EndingController.Instance != null) EndingController.Instance.TriggerEnding();
     }

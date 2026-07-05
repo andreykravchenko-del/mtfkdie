@@ -18,14 +18,21 @@ public class GameManager : MonoBehaviour
     public int Hope => hope;
     public int Despair => despair;
 
-    [Header("Секретная концовка")]
-    [Tooltip("Общее число предметов памяти. -1 = посчитать автоматически по сцене на старте.")]
+    [Header("Секретная концовка / открытие финала")]
+    [Tooltip("Общее число ЗНАЧИМЫХ предметов памяти. -1 = посчитать автоматически по сцене на старте.")]
     [SerializeField] private int totalMemoryItemsOverride = -1;
+    [Tooltip("Сколько значимых предметов нужно осмотреть (запомнить или забыть), чтобы кровать открыла финал.")]
+    [SerializeField] private int itemsToOpenFinale = 12;
 
-    /// Сколько предметов игрок запомнил (E) и забыл (F) — для секретной концовки «всё забыть».
+    /// Сколько ЗНАЧИМЫХ предметов игрок запомнил (E) и забыл (F) — для секретной концовки «всё забыть».
     public int RememberedCount { get; private set; }
     public int ForgottenCount { get; private set; }
     public int TotalMemoryItems { get; private set; }
+
+    /// Сколько значимых предметов осмотрено всего (запомнено + забыто) — для открытия финала.
+    public int SignificantInspected => RememberedCount + ForgottenCount;
+    /// Открыт ли финал: осмотрено достаточно значимых предметов.
+    public bool FinaleUnlocked => SignificantInspected >= itemsToOpenFinale;
 
     public GameMode Mode { get; private set; } = GameMode.Explore;
 
@@ -55,7 +62,7 @@ public class GameManager : MonoBehaviour
     {
         int n = 0;
         foreach (var it in FindObjectsByType<Interactable>(FindObjectsSortMode.None))
-            if (it.Data != null) n++;
+            if (it.Data != null && it.Data.significant) n++;
         return n;
     }
 
@@ -73,7 +80,8 @@ public class GameManager : MonoBehaviour
     public void AddHope(int amount)    => hope    += Mathf.Max(0, amount);
     public void AddDespair(int amount) => despair += Mathf.Max(0, amount);
 
-    /// Учёт выбора игрока (для секретной концовки «всё забыть»).
-    public void RegisterRemember() => RememberedCount++;
-    public void RegisterForget()   => ForgottenCount++;
+    /// Учёт выбора игрока (для секретной концовки «всё забыть» и открытия финала).
+    /// Простые (незначимые) предметы в счёт не идут.
+    public void RegisterRemember(bool significant) { if (significant) RememberedCount++; }
+    public void RegisterForget(bool significant)   { if (significant) ForgottenCount++; }
 }

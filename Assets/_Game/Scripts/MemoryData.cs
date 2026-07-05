@@ -16,6 +16,9 @@ public class MemoryData : ScriptableObject
     [Tooltip("Ярлык для нарратива/подсказок. На очки НЕ влияет — очки задаются дельтами ниже.")]
     public MemoryKind kind = MemoryKind.Good;
 
+    [Tooltip("Значимый предмет: учитывается в счётчике «12 предметов для открытия финала» и в секретной концовке. Простые вещи — false.")]
+    public bool significant = true;
+
     [Header("Дельты очков (надежда / безнадёжность)")]
     [Tooltip("Запомнить (держать E): сколько прибавить к надежде.")]
     [Min(0)] public int rememberHope;
