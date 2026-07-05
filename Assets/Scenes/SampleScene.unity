@@ -2181,12 +2181,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d2664fe42264844594b73cbb08b9141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
+  data: {fileID: 11400000, guid: b447e9d151c542c8bd76fcf37a5c2e43, type: 2}
   highlightRenderer: {fileID: 510403072}
   highlightColor: {r: 1, g: 0.85, b: 0.45, a: 1}
   highlightIntensity: 0.1
   inspectModelOverride: {fileID: 510403071}
-  inspectLocalScale: {x: 1, y: 1, z: 1}
+  inspectLocalScale: {x: 500, y: 500, z: 500}
   inspectLocalEuler: {x: 0, y: 0, z: 0}
 --- !u!65 &510403074
 BoxCollider:
@@ -4500,6 +4500,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 188dce7bdc7094878b4e0c8ca4418a9c, type: 3}
+--- !u!23 &1153856468 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 188dce7bdc7094878b4e0c8ca4418a9c, type: 3}
+  m_PrefabInstance: {fileID: 1153856467}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1153856469 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 188dce7bdc7094878b4e0c8ca4418a9c, type: 3}
+  m_PrefabInstance: {fileID: 1153856467}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1167452946
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4737,12 +4747,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d2664fe42264844594b73cbb08b9141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
+  data: {fileID: 11400000, guid: 4d9ae818b5d347ad9cb076c1a348eae9, type: 2}
   highlightRenderer: {fileID: 1186800964}
   highlightColor: {r: 1, g: 0.85, b: 0.45, a: 1}
   highlightIntensity: 0.1
   inspectModelOverride: {fileID: 1186800963}
-  inspectLocalScale: {x: 1, y: 1, z: 1}
+  inspectLocalScale: {x: 2000, y: 15.98835, z: 1000}
   inspectLocalEuler: {x: 0, y: 0, z: 0}
 --- !u!65 &1186800966
 BoxCollider:
@@ -5999,11 +6009,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a6139c9e6c96cc744888409a0d44ab3b, type: 3}
   m_PrefabInstance: {fileID: 1533310847}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &1533310849 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: a6139c9e6c96cc744888409a0d44ab3b, type: 3}
-  m_PrefabInstance: {fileID: 1533310847}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1533310850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6016,12 +6021,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d2664fe42264844594b73cbb08b9141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
-  highlightRenderer: {fileID: 1533310849}
+  data: {fileID: 11400000, guid: 113d7776f7a24b32a3e7393060ef2011, type: 2}
+  highlightRenderer: {fileID: 1153856468}
   highlightColor: {r: 1, g: 0.85, b: 0.45, a: 1}
   highlightIntensity: 0.1
-  inspectModelOverride: {fileID: 1533310848}
-  inspectLocalScale: {x: 1, y: 1, z: 1}
+  inspectModelOverride: {fileID: 1153856469}
+  inspectLocalScale: {x: 500, y: 500, z: 500}
   inspectLocalEuler: {x: 0, y: 0, z: 0}
 --- !u!65 &1533310851
 BoxCollider:
@@ -6183,12 +6188,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d2664fe42264844594b73cbb08b9141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
+  data: {fileID: 11400000, guid: e77f86f5f7fd4294a01fb5fb33e0b3ca, type: 2}
   highlightRenderer: {fileID: 1587478882}
   highlightColor: {r: 1, g: 0.85, b: 0.45, a: 1}
   highlightIntensity: 0.1
   inspectModelOverride: {fileID: 1587478881}
-  inspectLocalScale: {x: 1, y: 1, z: 1}
+  inspectLocalScale: {x: 500, y: 500, z: 500}
   inspectLocalEuler: {x: 0, y: 0, z: 0}
 --- !u!65 &1587478884
 BoxCollider:
@@ -6882,7 +6887,7 @@ MonoBehaviour:
   neutralMusic: {fileID: 0}
   deathGreyNoise: {fileID: 8300000, guid: 6d36d654b6f267242a33809e9386e561, type: 3}
   secretSound: {fileID: 0}
-  goodThreshold: 7
+  goodThreshold: 6
   badThreshold: -7
 --- !u!114 &1834593487
 MonoBehaviour:
