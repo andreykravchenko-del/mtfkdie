@@ -699,7 +699,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 10, y: 10}
+  m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7488025308971627254
 CanvasRenderer:
@@ -722,14 +722,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -704357543, guid: 34cf4e69a5f253bb1ae86ca27f7baee8, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1002,8 +1002,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dot: {fileID: 3926616768063380829}
-  idleColor: {r: 1, g: 1, b: 1, a: 0.45}
-  activeColor: {r: 1, g: 0.85, b: 0.45, a: 1}
+  idleColor: {r: 1, g: 1, b: 1, a: 1}
+  activeColor: {r: 1, g: 0.9019608, b: 0.69803923, a: 1}
   promptText: {fileID: 762416061858765273}
 --- !u!1 &3938005527911346646
 GameObject:
@@ -1250,7 +1250,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -30}
+  m_AnchoredPosition: {x: 0, y: -20}
   m_SizeDelta: {x: 700, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &5739254949760448612
@@ -1281,7 +1281,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: FUF FUF UF
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3c5d457765882ecccac01f189894b3de, type: 2}
   m_sharedMaterial: {fileID: 4797489730243389604, guid: 3c5d457765882ecccac01f189894b3de, type: 2}
@@ -1290,7 +1290,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4289914623
   m_fontColor: {r: 1, g: 0.9, b: 0.7, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
