@@ -17,6 +17,7 @@ public class MemoryReveal : MonoBehaviour
     [SerializeField] private TMP_Text caption;
 
     private bool showing;
+    private bool justShown; // клик, открывший панель, не должен в тот же кадр её закрыть
 
     void Awake()
     {
@@ -33,6 +34,7 @@ public class MemoryReveal : MonoBehaviour
         }
 
         showing = true;
+        justShown = true; // клик этого кадра открыл панель — не даём ему же её закрыть
         GameManager.Instance.SetMode(GameMode.Reveal);
         if (panel != null) panel.SetActive(true);
         if (image != null) { image.sprite = data.memoryImage; image.enabled = true; }
@@ -44,6 +46,10 @@ public class MemoryReveal : MonoBehaviour
 
     void Update()
     {
+        // Пропускаем кадр открытия: тот же клик ЛКМ, что вызвал Show, ещё держит
+        // wasPressedThisFrame и иначе закрыл бы панель в этом же кадре.
+        if (justShown) { justShown = false; return; }
+
         if (!showing || !AdvancePressed()) return;
 
         showing = false;
