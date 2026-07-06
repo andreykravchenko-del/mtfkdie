@@ -24,5 +24,6 @@ MonoBehaviour:
   captureComments:
   - "\u041F\u0440\u043E\u0441\u0442\u043E \u043B\u043E\u0436\u043A\u0430."
   memoryImage: {fileID: 0}
+  memoryText: 
   itemSound: {fileID: 0}
-  revealSound: {fileID: 8300000, guid: 492f682f1478f9644a93fb345b5381b7, type: 3}
+  revealSound: {fileID: 8300000, guid: 22ce98f591a53894cb3ac8d3eeb71d58, type: 3}

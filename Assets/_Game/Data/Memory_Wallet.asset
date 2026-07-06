@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Memory_Wallet
   m_EditorClassIdentifier: 
   displayName: "\u041A\u043E\u0448\u0435\u043B\u0451\u043A"
-  description: "\u041A\u043E\u0448\u0435\u043B\u0451\u043A. \u041F\u043E\u0442\u0451\u0440\u0442\u0430\u044F
-    \u043A\u043E\u0436\u0430, \u043F\u0430\u0440\u0430 \u043C\u0435\u043B\u043E\u0447\u0435\u0439
-    \u0432\u043D\u0443\u0442\u0440\u0438."
+  description: "\u0421\u044E\u0434\u0430 \u044F \u0441\u043A\u043B\u0430\u0434\u044B\u0432\u0430\u043B
+    \u0441\u0447\u0430\u0441\u0442\u043B\u0438\u0432\u044B\u0435 \u0431\u0438\u043B\u0435\u0442\u0438\u043A\u0438
+    \u0442\u0440\u0430\u043C\u0432\u0430\u044F."
   kind: 0
   significant: 0
   rememberHope: 0
@@ -24,7 +24,12 @@ MonoBehaviour:
   forgetDespair: 0
   captureDuration: 3
   captureComments:
-  - "\u041F\u0440\u043E\u0441\u0442\u043E \u043A\u043E\u0448\u0435\u043B\u0451\u043A."
-  memoryImage: {fileID: 0}
+  - "\u041F\u043E\u0447\u0442\u0438 \u0443\u0436\u0435 \u043F\u0443\u0441\u0442\u043E\u0439."
+  - "\u0410 \u043D\u0435\u0442, \u0435\u0441\u0442\u044C \u0435\u0449\u0435 \u043D\u0435\u043C\u043D\u043E\u0433\u043E
+    \u0434\u0435\u043D\u0435\u0433."
+  memoryImage: {fileID: 21300000, guid: 9f5e99c4911ac9941a94598ed542fd64, type: 3}
+  memoryText: "\u0414\u043E\u043B\u0436\u043D\u043E \u0445\u0432\u0430\u0442\u0438\u0442\u044C
+    \u0435\u0449\u0435 \u043D\u0430 \u043E\u0434\u043D\u0443 \u043D\u0435\u0434\u0435\u043B\u044E,
+    \u0430 \u0434\u0430\u043B\u044C\u0448\u0435? "
   itemSound: {fileID: 8300000, guid: fcd1fcb836f2621458046967f8cb8df6, type: 3}
-  revealSound: {fileID: 8300000, guid: 492f682f1478f9644a93fb345b5381b7, type: 3}
+  revealSound: {fileID: 8300000, guid: 22ce98f591a53894cb3ac8d3eeb71d58, type: 3}

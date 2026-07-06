@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Memory_Comb
   m_EditorClassIdentifier: 
   displayName: "\u0420\u0430\u0441\u0447\u0451\u0441\u043A\u0430"
-  description: "\u041F\u043B\u0430\u0441\u0442\u0438\u043A\u043E\u0432\u0430\u044F \u0440\u0430\u0441\u0447\u0451\u0441\u043A\u0430."
+  description: "\u041F\u043B\u0430\u0441\u0442\u0438\u043A\u043E\u0432\u0430\u044F
+    \u0440\u0430\u0441\u0447\u0451\u0441\u043A\u0430."
   kind: 0
   significant: 0
   rememberHope: 0
@@ -24,5 +25,6 @@ MonoBehaviour:
   captureComments:
   - "\u041F\u0440\u043E\u0441\u0442\u043E \u0440\u0430\u0441\u0447\u0451\u0441\u043A\u0430."
   memoryImage: {fileID: 0}
+  memoryText: 
   itemSound: {fileID: 0}
-  revealSound: {fileID: 8300000, guid: 492f682f1478f9644a93fb345b5381b7, type: 3}
+  revealSound: {fileID: 8300000, guid: 22ce98f591a53894cb3ac8d3eeb71d58, type: 3}

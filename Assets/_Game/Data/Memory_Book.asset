@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Memory_Book
   m_EditorClassIdentifier: 
   displayName: "\u041A\u043D\u0438\u0433\u0430"
-  description: "\u041A\u043D\u0438\u0433\u0430. \u0417\u0430\u043B\u043E\u0436\u0435\u043D\u0430
-    \u043D\u0430 \u0441\u0435\u0440\u0435\u0434\u0438\u043D\u0435 \u0438 \u0431\u0440\u043E\u0448\u0435\u043D\u0430."
+  description: "\u041D\u0430\u0434\u043E \u0441\u043E\u0431\u0440\u0430\u0442\u044C
+    \u0432\u0441\u044E \u043A\u043E\u043B\u043B\u0435\u043A\u0446\u0438\u044E."
   kind: 0
   significant: 0
   rememberHope: 0
@@ -23,7 +23,14 @@ MonoBehaviour:
   forgetDespair: 0
   captureDuration: 3
   captureComments:
-  - "\u041F\u0440\u043E\u0441\u0442\u043E \u043A\u043D\u0438\u0433\u0430."
-  memoryImage: {fileID: 0}
+  - "\u0414\u043E\u043B\u0433\u043E \u0438\u0441\u043A\u0430\u043B \u044D\u0442\u043E
+    \u0438\u0437\u0434\u0430\u043D\u0438\u0435."
+  - "\u0414\u043E \u0441\u0438\u0445 \u043F\u043E\u0440 \u043F\u0430\u0445\u043D\u0435\u0442
+    \u043D\u043E\u0432\u043E\u0439 \u043A\u043D\u0438\u0433\u043E\u0439."
+  memoryImage: {fileID: 21300000, guid: a4b4b4887f1b02f49944ea7bb4301613, type: 3}
+  memoryText: "\u0415\u0449\u0435 \u043E\u0434\u043D\u043E \u043D\u0435\u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u043D\u043E\u0435
+    \u0434\u0435\u043B\u043E. \u041F\u0440\u0438\u0434\u0435\u0442\u0441\u044F \u043D\u0430\u0447\u0430\u0442\u044C
+    \u0441\u043D\u0430\u0447\u0430\u043B\u0430, \u044F \u043F\u043E\u0447\u0442\u0438
+    \u043D\u0438\u0447\u0435\u0433\u043E \u043D\u0435 \u043F\u043E\u043C\u043D\u044E. "
   itemSound: {fileID: 8300000, guid: 03db34e8edd8134459f1078a051b950c, type: 3}
-  revealSound: {fileID: 8300000, guid: 492f682f1478f9644a93fb345b5381b7, type: 3}
+  revealSound: {fileID: 8300000, guid: 22ce98f591a53894cb3ac8d3eeb71d58, type: 3}
